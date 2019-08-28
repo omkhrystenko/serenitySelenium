@@ -1,16 +1,34 @@
-package step;
+package step.steps;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
+import org.jbehave.core.annotations.BeforeStory;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import page.HomePage;
 import page.LandingPage;
 import page.LoginPage;
 
+import java.net.MalformedURLException;
+
 import static org.junit.Assert.assertTrue;
 
 public class UserSteps extends ScenarioSteps {
+
+    @Managed(driver = "chrome")
+    public WebDriver driver;
+
+    @BeforeStory
+    public void setupDriver() throws MalformedURLException {
+        //Для локального запуска эта строка нужна WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().setup();
+    }
+
+
+
 
     Logger logger = LoggerFactory.getLogger(this.getClass().getName()); //org.slf4j.Logger;
 
@@ -35,8 +53,8 @@ public class UserSteps extends ScenarioSteps {
     }
 
     @Step
-    public UserSteps goToLoginPage(){
-        landingPage.clickEnterToLoginPage();
+    public UserSteps clickOnButton(String buttonText){
+        landingPage.clickOnButtonWithText(buttonText);
         logger.info("Click on Enter button on Landing page was successful");
         return this;
     }
@@ -76,3 +94,4 @@ public class UserSteps extends ScenarioSteps {
         return this;
     }
 }
+

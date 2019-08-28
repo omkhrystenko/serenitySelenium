@@ -15,7 +15,7 @@ public class LinkedinLoginTest extends BaseTest {
     public void successfulLoginTest() throws InterruptedException {
         user.openLandingPage()
         .verifyLandingPageControllElementAppear()
-        .goToLoginPage()
+        .clickOnButton("Sign In")
 
         .verifyLoginPageUrlLoaded()
         .verifyLoginPageControllElementAppear()

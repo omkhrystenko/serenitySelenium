@@ -1,17 +1,13 @@
 package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import net.serenitybdd.jbehave.SerenityStories;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import step.UserSteps;
+import step.steps.UserSteps;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 
 public class BaseTest {
 

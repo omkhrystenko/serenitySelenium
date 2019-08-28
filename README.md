@@ -205,7 +205,7 @@ selenoid ui
 
 - в директории юзера C:\Users\Dell\.aerokube\selenoid хранится папка browser.json в нем прописаны браузеры и их версии
 для закачки селеноидом, если мы хотим закачать себе браузер соотв. версии добавляем его туда.
-Чтобы его подгрузить в селеноид нам нужно выкпчать этот имедж и перезапустить контейнер.
+Чтобы его подгрузить в селеноид нам нужно выкачать этот имедж и перезапустить контейнер.
 Пример с порядком действий на Unix (на Windows должно быть также + нюансы):
 
 Add new docker image on flight:
@@ -238,4 +238,120 @@ chrome.switches="--start-maximized"
 
 После того как все готово. Просто запускаем тест и он должен отобразится в соответствующей сессии на Selenoid UI,
 если открыть экран сессии то мы сможем увидеть прохождение нашего теста.
+
+ Home Task #5:
+ - Complete task from home task #4 if not completed
+ - Make sure your Selenoid setup works locally on your PC 
+ Note: I'll try to provide solution for docker daemon on Win
+ 
+       
+Lesson 6
+
+Для того чтобы коректно работал запуск тестов из файлов stories необходимо установить плагин:
+JBhave Support 1.53     - Plugin for stosries to run via @Metafilter via command "mvn clean verify"
+
+В файл pom была добавлена секция <profiles>, которая позволяет запускать тесты в одном из трех режимимов(выбирается в 
+разделе Maven закладка справа на краю панели) browserstack, local, selenoid (для отображения панели нужно перезагрузить Intelij): 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven.failsafe.plugin.version}</version>
+                        <configuration>
+                            <!--To run by SerenitySites in parallel
+                            <parallel>suites</parallel>
+                            <threadCountSuites>2</threadCountSuites>
+                            <forkCount>2</forkCount>-->
+                            <includes>
+                                <!--To run by testName from command line-->
+                                <include>**/test/**/${test.name}.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <webdriver.driver>chrome</webdriver.driver>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>selenoid</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven.failsafe.plugin.version}</version>
+                        <configuration>
+                            <includes>
+                                <!--To run by testName from command line-->
+                                <include>**/test/**/${test.name}.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <webdriver.remote.url>http://172.29.147.226:4444/wd/hub</webdriver.remote.url>
+                                <!--                                <webdriver.remote.url>http://34.220.181.94:4444/wd/hub</webdriver.remote.url>-->
+                                <serenity.driver.capabilities>enableVNC:true;enableVideo:true;sessionTimeout:2m;timeZone:America/Los_Angeles;</serenity.driver.capabilities>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>browserstack</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven.failsafe.plugin.version}</version>
+                        <configuration>
+                            <!--To run by SerenitySites in parallel
+                            <parallel>suites</parallel>
+                            <threadCountSuites>2</threadCountSuites>
+                            <forkCount>2</forkCount>-->
+                            <includes>
+                                <!--To run by testName from command line-->
+                                <include>**/test/**/${test.name}.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <webdriver.remote.url>https://olehxxxxxxxxxnko1:ruMfFmLKxRh6hj78A6HH@hub-cloud.browserstack.com/wd/hub</webdriver.remote.url>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+Home Task #6
+1. Make sure your local setup of Docker/Selenoid is working
+Note: README.md should contain detailed info on how to setup selenoid on Windows.
+2. Make sure local/selenoid/browserstack profiles are working on your project. 
+Note: 'browserstack' profile needs to be filled with variables in pom.xml
 
