@@ -91,6 +91,7 @@
                             </includes>
                             <systemPropertyVariables>
                                 <webdriver.driver>chrome</webdriver.driver>
+                                <serenity.driver.capabilities>browserName:chrome;</serenity.driver.capabilities>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -118,9 +119,9 @@
                                 <include>**/test/**/${test.name}.java</include>
                             </includes>
                             <systemPropertyVariables>
-                                <webdriver.remote.url>http://172.29.147.226:4444/wd/hub</webdriver.remote.url>
-                                <!--                                <webdriver.remote.url>http://34.220.181.94:4444/wd/hub</webdriver.remote.url>-->
-                                <serenity.driver.capabilities>enableVNC:true;enableVideo:true;sessionTimeout:2m;timeZone:America/Los_Angeles;</serenity.driver.capabilities>
+                                <webdriver.remote.url>http://192.168.43.75:4444/wd/hub</webdriver.remote.url>
+                                <!--  запуск у Коли  <webdriver.remote.url>http://172.29.147.226:4444/wd/hub</webdriver.remote.url>-->
+                                <serenity.driver.capabilities>browserName:chrome;version:75.0;enableVNC:true;enableVideo:true;sessionTimeout:2m;timeZone:America/Los_Angeles;</serenity.driver.capabilities>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -152,7 +153,7 @@
                                 <include>**/test/**/${test.name}.java</include>
                             </includes>
                             <systemPropertyVariables>
-                                <webdriver.remote.url>https://olehxxxxxxxxxnko1:ruMfFmLKxRh6hj78A6HH@hub-cloud.browserstack.com/wd/hub</webdriver.remote.url>
+                               <webdriver.remote.url>https://olehxxxxxxxxxnko1:ruMfFmLKxRh6hj78A6HH@hub-cloud.browserstack.com/wd/hub</webdriver.remote.url>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

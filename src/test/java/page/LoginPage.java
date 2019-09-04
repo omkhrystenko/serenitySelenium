@@ -25,6 +25,9 @@ public class LoginPage extends PageObject {
     @FindBy(xpath="//*[@id='app__container']/main/div/form/div[3]/button")
     public WebElementFacade buttonEnterForAuthentification;
 
+    @FindBy(xpath = "//*[@id = 'error-for-password']")
+    public WebElementFacade passwordErrorMessage;
+
     @WhenPageOpens
     public boolean getCurrentPage() {
         return getPages().isCurrentPageAt(LoginPage.class);
@@ -50,6 +53,16 @@ public class LoginPage extends PageObject {
         buttonEnterForAuthentification.click();
     }
 
+    public boolean isPasswordErrorMessageContains(String messagePattern) {
+        boolean res = false;
+
+        if (messagePattern.contains("password") || messagePattern.contains("пароль")) {
+            if (passwordErrorMessage.getText().contains("password") || passwordErrorMessage.getText().contains("пароль")) {
+                res = true;
+            }
+        }
+        return res;
+    }
 
 
 }

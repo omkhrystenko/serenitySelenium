@@ -115,6 +115,34 @@ G.G.R. (kind of Selenoid for launching on CMD project)
 понадобится при установке Docker)
 Также нужно скачать установочный файл для своей ОС. Установка доступна из своего профайла.
 
+Запуск докера на win10 (Коментарий Вити):
+
+Go to Docker Settings - General
+Turn on flag "Expose daemon on tcp://localhost:2375 without TLS"
+Check if file present: C:\Users\loboda_v\.docker\daemon.json
+
+In PowerShall execute:
+1. to create+start conteiner from images:
+docker run -d                                         `
+ --name selenoid                                         `
+ -p 4444:4444                                            `
+ -v /var/run/docker.sock:/var/run/docker.sock           `
+ -v C:\Users\<user_name>\.aerokube\selenoid:/etc/selenoid/:ro                 `
+ aerokube/selenoid:latest-release
+
+2. to stop conteiner:
+docker stop selenoid
+
+3. to start conteiner:
+docker start selenoid
+
+4. to start selenoid-ui:
+.\cm selenoid-ui start
+
+5. to stop selenoid-ui:
+.\cm selenoid-ui stop
+
+
 - Установка Selenoid:
 We use manual for install on link https://aerokube.com/selenoid/latest/ there we need to load binary
 files first: Configuration Manager (link https://github.com/aerokube/cm/releases/tag/1.6.0) for Selenoid
@@ -252,7 +280,7 @@ JBhave Support 1.53     - Plugin for stosries to run via @Metafilter via command
 
 В файл pom была добавлена секция <profiles>, которая позволяет запускать тесты в одном из трех режимимов(выбирается в 
 разделе Maven закладка справа на краю панели) browserstack, local, selenoid (для отображения панели нужно перезагрузить Intelij): 
-    <profiles>
+   <profiles>
         <profile>
             <id>local</id>
             <build>
@@ -271,6 +299,7 @@ JBhave Support 1.53     - Plugin for stosries to run via @Metafilter via command
                             </includes>
                             <systemPropertyVariables>
                                 <webdriver.driver>chrome</webdriver.driver>
+                                <serenity.driver.capabilities>browserName:chrome;</serenity.driver.capabilities>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -298,9 +327,9 @@ JBhave Support 1.53     - Plugin for stosries to run via @Metafilter via command
                                 <include>**/test/**/${test.name}.java</include>
                             </includes>
                             <systemPropertyVariables>
-                                <webdriver.remote.url>http://172.29.147.226:4444/wd/hub</webdriver.remote.url>
-                                <!--                                <webdriver.remote.url>http://34.220.181.94:4444/wd/hub</webdriver.remote.url>-->
-                                <serenity.driver.capabilities>enableVNC:true;enableVideo:true;sessionTimeout:2m;timeZone:America/Los_Angeles;</serenity.driver.capabilities>
+                                <webdriver.remote.url>http://192.168.43.75:4444/wd/hub</webdriver.remote.url>
+                                <!--  запуск у Коли  <webdriver.remote.url>http://172.29.147.226:4444/wd/hub</webdriver.remote.url>-->
+                                <serenity.driver.capabilities>browserName:chrome;version:75.0;enableVNC:true;enableVideo:true;sessionTimeout:2m;timeZone:America/Los_Angeles;</serenity.driver.capabilities>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -349,9 +378,59 @@ JBhave Support 1.53     - Plugin for stosries to run via @Metafilter via command
         </profile>
     </profiles>
 
+1) для запуска определенной версии браузера через профайл на селеноид
+- содержание профайла
+- запуск профайла только через IDE и через галочку в секции maven?
+
+2)для запуска определенной версии браузера через профайл на local
+- указать версию драйвера и капабилити
+
+
+1)Для того чтобы сгенерировать отчет serenity после запуска не через командную строку через mvn, 
+после прохождения тестов используется команда CMD: 
+mvn serenity:aggregate -Dserenity.outputDirectory=C:\Users\Dell\IdeaProjects\serenity-selenium-22.07.19\target\site\serenity
+
+
 Home Task #6
 1. Make sure your local setup of Docker/Selenoid is working
 Note: README.md should contain detailed info on how to setup selenoid on Windows.
 2. Make sure local/selenoid/browserstack profiles are working on your project. 
 Note: 'browserstack' profile needs to be filled with variables in pom.xml
+
+Вопросы:
+1)Как запустить профайл mvn local, selenoid, browserstack через командную строку?
+2)Как на селеноид запускать разные браузеры в разных операционных системах через профайл?
+3)Как передать параметры ОС и версии браузера через профайл для запуска на browserstack?
+3.1)Мы передавали эти параметры при запуске на browserstack через командную строку, как нам передать эти значения
+    через профайл в pom.xml?
+    
+mvn clean test serenity:aggregate
+-Dmaven.clean.failOnError=false
+-Dmaven.test.failure.ignore=true
+-Dwebdriver.remote.url=https://olehxxxxxxxxxnko1:ruMfFmLKxRh6hj78A6HH@hub-cloud.browserstack.com/wd/hub
+-Dwebdriver.remote.driver=chrome
+-Dwebdriver.remote.os=WINDOWS
+-Dwebdriver.remote.os_version=10
+-Dwebdriver.remote.browserstack.debug=true
+-Dchrome.switches="--no-sandbox,--ignore-certificate-errors,--homepage=about:blank,--no-first-run"
+
+
+4)Какие могут быть варианты паралельного запуска на selenoid в docker контейнерах и на browserstack?
+5)Как групировать тесты через @Metafilter, Как запустить один клас с @Metafilter, если их несколько через командную строку?
+
+
+
+Вопрос, как сагрегировать отчет серенити через запуск через профайл, особенно через браузерстек
+
+
+Lesson 7 missed
+
+Тема запись нескольких Scenario в story посредством Outline
+
+Home Task #7:
+Extend login.story 2 with negative scenarios
+- Add/Implement Scenario Outline for Negative login test that will remain on Login page
+- Add/Implement Scenario Outline for Negative login test that will fall to Error page
+
+Make sure all scenarios are passed.
 

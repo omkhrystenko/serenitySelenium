@@ -1,0 +1,250 @@
+1)Скачать дистрибутив ОС Ubuntu с сайта
+2)В окне VirtualBox -> Создать -> ввести имя ОС и выбрать соотв праметры типа и версии -> Далее
+3)Выбрать обьем оперативной памяти -> Далее
+4)Отметить чекбокс Создать новый виртуальный жесткий диск -> Создать
+5)Отметить чекбокс VDI(Virtual Disk Image) -> Далее
+6)Отметить чекбокс Динамический виртуальный жесткий диск -> Далее
+7)Ввести обьем жесткого диска -> Создать
+8)В меню VirtualBox появилась иконка виртульной машины правой кнопкой миши вызвать меню -> Настроить
+9)Переходим на вкладку система и убираем галочку с чекбокса Гибкий диск, в разделе процессор выбираем количество ядер
+10)Переходим а вкладку дисплей ставим галочку в чекбоксе включить 3D ускорение и выбираем максимально возможный обьем видеопамяти
+11)Переходим в закладку носители, выбираем диск в разделе Контролеры IDE и в разделе оптический привод выбираем скачаный образ ОС
+12)Переходим в закладку сеть, если Выбран сетевой адаптер и стоит тип подключения NAT то мы сможем пользоваться интернет свободно через
+основную ОС, а если мы хотим, чтобы наша виртуальная машина отображалась в нашей локальной сети то выбираем тип Сетевой мост
+(роутер будет выдавать виртуальный машине IP адресс)
+13) Нажимаем -> Ok
+14)В окне VirtualBox нажимаем -> Запустить
+15)После того как система запустилась выбираем язык и нажимаем кнопку Install Ubuntu
+16)Выбираем раскладку клавиатуры (русская) -> Continue
+17)Должна стоять галочка Normall instalation (галочку Download updates while installing ubuntu можно убрать, если это возможно)
+Также можно поставить галочку в чекбокс Install third-party software for graphics and WiFi... это автоматическая установка драйверов
+для видеокарты, звука и пр. Нажимаем -> Continue
+18)Если устанавливаем на виртуальную машину то оставляем галочку в чекбоксе Erase disk and install Ubuntu, а если это компьютер то
+можем выбрать Something else и тогда нам нужно будет разбить диск. Нажимаем -> Install now
+19)Выбираем часовой пояс
+20)Вводим свое имя и пароль нажимаем -> Continue и начинается процесс установки ОС
+21)После того как установка закончилась нажимаем кнопку Restart Now
+22)После сообщения о необходимости извлечения образа, виртуальная машина сама извлекает его, нажимаем Enter или перегружаем вручную (останавливаем и запускаем)
+23)Загружается рабочий стол, установка окончена
+24)Next -> Next -> No, don't send system info -> Done
+
+
+Installing Java on Ubuntu
+1)update the apt package index with:
+sudo apt update
+
+2)Once the package index is updated install the default Java OpenJDK package with:
+sudo apt install default-jdk
+
+3)Verify the installation, by running the following command which will print the Java version:
+java -version
+
+4)To set the JAVA_HOME environment variable, first, you need to find out the Java installation paths using the update-alternatives command
+sudo update-alternatives --config java
+
+5)Copy the installation path of your preferred installation. Next, open the /etc/environment file:
+sudo nano /etc/environment
+
+6)Add the following line, at the end of the file:
+JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+
+To save data press Enter
+
+
+Installing Maven on Ubuntu
+
+1)Start by updating the package index:
+sudo apt update
+
+2)install Maven by typing the following command:
+sudo apt install maven
+
+3)Verify the installation by running the mvn -version command:
+mvn -version
+
+
+Installing GIT on Ubuntu
+
+1)Start by updating the package index:
+sudo apt update
+
+2)Run the following command to install Git:
+sudo apt install git
+
+3)Verify the installation by typing the following command which will print the Git version:
+git --version
+
+
+Installing Intelij IDE
+
+1)sudo snap install intellij-idea-community --classic
+
+Setting Maven in Intelij IDE on Ubuntu
+После того как я подгрузил проект с git hub dependensies не подтягивались пока я не запустил maven clean verify в консоли
+после чего понадобилось перезагрузить IDE раз и выставить настройки maven в file -> settings по умолчанию, до этого я скопировал
+settings.xml в папку .m2 (отобразить скрытые папки ctrl + H)
+
+Instaling DOCKER on UBUNTU (SET UP THE REPOSITORY and INSTALL DOCKER ENGINE - COMMUNITY)
+
+1)Uninstalling docker and containers:
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+Install using the repository(https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+
+SET UP THE REPOSITORY
+1)Update the apt package index:
+sudo apt-get update
+
+2)Install packages to allow apt to use a repository over HTTPS:
+	sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+3)Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+4)Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint:
+sudo apt-key fingerprint 0EBFCD88
+
+5)Use the following command to set up the stable repository:
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+ 
+INSTALL DOCKER ENGINE - COMMUNITY
+1)Update the apt package index:
+sudo apt-get update
+ 
+2)Install the latest version of Docker Engine - Community and containerd, or go to the next step to install a specific version:
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+3)Verify that Docker Engine - Community is installed correctly by running the hello-world image:
+sudo docker run hello-world
+
+
+Instaling Selenoid on Ubuntu
+0)Переходим в root права
+- Устанавливаем временный пароль для root
+sudo passwd root
+*************
+*************
+
+su
+*************
+
+1)Options list (docker ps), show all containers (-a), only display numeric id's (-q) 
+docker ps -aq
+
+
+1.1)Show list images
+docker images
+
+2)Неинтерактивная загрузка файла,  -О cm (write loaded documents to file cm)
+wget -O cm https://github.com/aerokube/cm/releases/download/1.6.1/cm_linux_amd64
+
+3)ls (list information about the file, the current directory by default)  -lh (print human readable sizes eg 1KB or 234MB, 5G)
+ls -lh
+
+4)chmod +x (делает файл cm исполняемым (разрешает выполнить в качестве программы))
+chmod +x ./cm
+
+5)Загружаем селеноид
+./cm selenoid start --vnc
+
+6)Options list (docker ps), show all containers (-a), only display numeric id's (-q) /проверяем что контейнер с селеноид подгрузился
+docker ps -a
+
+7)Installing UI
+./cm selenoid-ui start
+
+8)Options list (docker ps), show all containers (-a), only display numeric id's (-q) /проверяем что контейнер с интерфейсом селеноид подгрузился
+docker ps -a
+
+9)Проверяем какие образы подгрузились
+docker images
+
+10)Загружаемм интерфейс в браузере по адресу localhost:8080
+
+
+Полезные команды Ubuntu (https://help.ubuntu.ru/wiki/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B0)
+
+1)Переходим в root права
+- Устанавливаем временный пароль для root
+sudo passwd root
+*************
+*************
+
+su
+*************
+
+2)Чтобы попасть в корневой каталог, выполните:
+cd /
+
+3)Чтобы попасть в домашнюю папку, выполните:
+cd ~
+
+4)Чтобы переместиться на один каталог вверх, используйте:
+cd ..
+
+5)Для возврата в предыдущую посещённую директорию, используйте:
+cd -
+
+6)Для перемещения через несколько директорий за раз, нужно написать полный путь папки, в которую вы хотите переместиться. Например, команда:
+cd /var/www
+переместит вас в подкаталог /www каталога /var/. А команда:
+
+cd ~/Рабочий\ стол
+переместит вас на рабочий стол. В данном случае «\» обозначает экранирование пробела.
+
+pwd показать текущюю директорию
+
+
+7)Команда cp копирует файл. Например, команда:
+cp text new
+создаст точную копию файла «text» и назовёт её «new», при этом «file» никуда не исчезнет. Для копирования директории необходимо воспользоваться командой:
+
+cp -r directoryName new
+где опция -r обозначает рекурсивное копирование.
+
+8)
+Команда mv перемещает файл в другое место или просто переименовывает файл. Например, команда:
+mv file text
+переименует «file» в «text».
+
+mv text ~/Рабочий\ стол
+переместит «text» вам на рабочий стол, но не переименуют его. Чтобы всё-таки переименовать файл, нужно специально указывать ему новое имя. Вы можете заменять путь к вашей домашней папке на '~', чтобы ускоряет работу. Помните, что при использовании mv вместе с sudo, терминал так же привязывает '~' к вашей домашней папке. Однако если вы включаете сессию суперпользователя в консоли с помощью sudo -i или sudo -s, то '~' будет ссылаться на корень диска, а не на ваш домашний каталог.
+
+9)
+Команда rm filename удаляет файл.
+Команда rmdir удаляет пустую папку. Чтобы удалить папку вместе со всеми вложениями, используйте rm -r вместо этого.
+
+10)
+mkdir Эта команда создаёт директорию. Команда mkdir music создаст вам папку, которая будет называться «music».
+
+11)Открыть файл в грфическом интерфейсе
+gedit /путь/к/папке/с_файлом/файл
+ 
+12)Редактировать файл в терминале
+nano /путь/к/файлу/имя_файла
+
+для перемещения по файлу используйте кнопки со стрелками, после того, как закончите редактировать файл ubuntu, нажмите чтобы сохранить Ctrl+O, а для выхода Ctrl+X. 
+
+13)Найти файл по имени locate filename
+
+14)Узнать АйПи адрес sudo ifconfig
+
+15)Проследить путь запроса по IP 
+traceroute www.google.com.ua (в win tracert www.google.com.ua)
+
+
+Настройка запуска тестов с локальной машины на виртуальной машине с Docker Selenoid
+
+1)Подключить сетевое соединение Сетевой мост (Bridge) в настройках виртуальной машины
+
+2)Прописать IP адресс машины в сети в значение localhost:4444/wd/hub переменной RemoteDriver
+
+Тесты должны пойти. Возможно нужно будет произвести перезагрузку системы, почему то сначала тесты не хотели запускаться с maven.

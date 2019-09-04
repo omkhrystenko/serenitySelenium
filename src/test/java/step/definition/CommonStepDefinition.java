@@ -36,7 +36,6 @@ public class CommonStepDefinition {//Class that describes .story files
     @When("I sign In as '$userEmail' , '$userPassword'")
     public void submitAuthenticationData(String login, String password){
         userSteps.submitAuthenticationData(login, password);
-
     }
 
     @Then("Home page is loaded")
@@ -45,5 +44,17 @@ public class CommonStepDefinition {//Class that describes .story files
         userSteps.verifyHomePageUrlLoaded()
                 .verifyHomePageControlElementAppear();
     }
+
+    @Then("I should receive a password error message '$message'")
+    public void verifyPasswordErrorMessage(String errorMessageText){
+        userSteps.verifyLoginPasswordErrorMessage(errorMessageText);
+    }
+
+    @Then("I should be on Error page")
+    public void verifyErrorPageIsLoaded(){
+        userSteps.verifyErrorPageUrlLoaded();
+    }
+
+
 
 }

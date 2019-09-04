@@ -30,8 +30,10 @@ public class LandingPage extends PageObject {
     }
 
     public void clickOnButtonWithText(String buttonText){// Это ломает структуру пейдж обджект, но дает возможность искать элементы по названию
-        WebElement button = getDriver().findElement(By.xpath(String.format("//a[text()='%s']", buttonText)));
-        button.click();
+        /*WebElement button = getDriver().findElement(By.xpath(String.format("//a[text()='%s']", buttonText)));
+        button.click();*/
+
+        buttonEnterForAuthentification.click();//испальзую эту реализацию так как на разных локализациях по разному назыается кнопка Войти
     }
 
 

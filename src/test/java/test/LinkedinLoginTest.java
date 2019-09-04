@@ -20,7 +20,7 @@ public class LinkedinLoginTest extends BaseTest {
         .verifyLoginPageUrlLoaded()
         .verifyLoginPageControllElementAppear()
         .submitAuthenticationData("testchitest@gmail.com", "Qwerty12");
-        Thread.sleep(50000);
+        Thread.sleep(5000);
         /*.verifyHomePageUrlLoaded()//Убрал эти шаги так как LinkedIn блокировал авторизацию
         .verifyHomePageControlElementAppear();*/
     }

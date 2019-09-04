@@ -8,6 +8,7 @@ import org.jbehave.core.annotations.BeforeStory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import page.ErrorPage;
 import page.HomePage;
 import page.LandingPage;
 import page.LoginPage;
@@ -35,6 +36,7 @@ public class UserSteps extends ScenarioSteps {
     LandingPage landingPage;
     LoginPage loginPage;
     HomePage homePage;
+    ErrorPage errorPage;
 
 
 
@@ -93,5 +95,20 @@ public class UserSteps extends ScenarioSteps {
         logger.info("Home page control element is loaded");
         return this;
     }
+
+    @Step
+    public UserSteps verifyLoginPasswordErrorMessage(String errorMessageText){
+        assertTrue(loginPage.isPasswordErrorMessageContains(errorMessageText));
+        logger.info("Login password error Message text matches pattern");
+        return this;
+    }
+
+    @Step
+    public UserSteps verifyErrorPageUrlLoaded(){
+        assertTrue(errorPage.getCurrentPage());
+        logger.info("Error page URL is right");
+        return this;
+    }
+
 }
 
