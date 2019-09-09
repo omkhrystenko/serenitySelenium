@@ -1,8 +1,8 @@
 Login
 
 Meta:
-@tag login
-@tag regression
+@login
+@regression
 
 Narrative
     In order to use app functionality
@@ -11,12 +11,11 @@ Narrative
 
 Scenario: Successful user login
 Meta:
-@tag login01
+@login01
 Given I open Landing page
 
 When I click on 'Sign in' button
 Then I should be on Login page
-
 
 When I sign In as '<email>' , '<password>'
 Then Home page is loaded
@@ -27,7 +26,8 @@ Examples:
 
 Scenario: Unsuccessfull user login in order to remain on Login page
 Meta:
-@tag login02
+@login02
+@smoke
 Given I open Landing page
 
 When I click on 'Sign in' button
@@ -36,7 +36,8 @@ Then I should be on Login page
 
 Scenario: Login test that will fall to Error page
 Meta:
-@tag login03
+@login03
+@smoke
 Given I open Landing page
 
 When I click on 'Sign in' button

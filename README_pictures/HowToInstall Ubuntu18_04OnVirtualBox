@@ -136,6 +136,11 @@ sudo passwd root
 su
 *************
 
+0.1)Все команды доккера запускаются в Ubuntu через root права, чтобы не писать
+каждый раз sudo или работать с доккером через su можно добавить своего user
+в группу доккера командой: sudo usermod -aG docker $USER   и сделать logout login
+командой exit и перезагрузить терминал.
+
 1)Options list (docker ps), show all containers (-a), only display numeric id's (-q) 
 docker ps -aq
 
@@ -240,6 +245,8 @@ nano /путь/к/файлу/имя_файла
 15)Проследить путь запроса по IP 
 traceroute www.google.com.ua (в win tracert www.google.com.ua)
 
+16)Узнать работает ли Docker
+sudo systemctl status docker
 
 Настройка запуска тестов с локальной машины на виртуальной машине с Docker Selenoid
 
@@ -248,3 +255,92 @@ traceroute www.google.com.ua (в win tracert www.google.com.ua)
 2)Прописать IP адресс машины в сети в значение localhost:4444/wd/hub переменной RemoteDriver
 
 Тесты должны пойти. Возможно нужно будет произвести перезагрузку системы, почему то сначала тесты не хотели запускаться с maven.
+
+Полезные команды Docker
+
+1)Все команды доккера запускаются в Ubuntu через root права, чтобы не писать
+каждый раз sudo или работать с доккером через su можно добавить своего user
+в группу доккера командой: sudo usermod -aG docker $USER   и сделать logout login
+командой exit и перезагрузить терминал
+
+2)Отобразить список имеджей: docker images
+
+3)Отобразить список запущенных контейнеров: docker ps
+
+3.1)Отобразить список контейнеров, которые когда-то запускались: docker ps -a
+4)Найти нужный имедж в репозитории docker hub (ищем сервер tomcat):
+docker search tomcat
+
+5)Скачать имедж с репозитория docker hub (загружаем сервер tomcat)
+docker pull tomcat
+
+6)Запустить имедж (-it интерактивно(не скрыто); -р (перенапровить порты с 8080
+(на нем запускается в доккере томкат) на порт 1234:
+docker run -it -p 1234:8080 tomcat
+
+в консоли отобразится запуск tomcat при этом мы не сможем работать в этой
+консоли пока не выйдем из tomcat (команда ctrl+c)
+
+Для запуска в скрытом режиме используем команду:
+docker run -d -p 1235:8080 tomcat
+вернет id контейнера
+
+я могу запустить несколько tomcat контейнеров, но на разных портах
+Также при запуске через команду run, docker сам автоматически будет
+выкачивать нужный образ нужной программы (search и pull не обязательны)
+
+7)Удалить имедж (для удаления имеджа не должно быть действующих контейнеров по нему
+(т.е. чтобы удалить имедж сначала нужно удалить все созданные на его базе контейнеры:
+docker rmi imageNameOrId
+
+7)Удалить контейнер:
+docker rm containerNameOrId
+
+8)Doccker file: создаем директорию и текстовый файл со скриптом в нем. Напр. инсталирование сервера апач
+и через скрипт выведение команды Hello World на html странице. Пример содержания файла:
+#---------------------------------------------------------------------------
+# Dockefile to build Docker Image of Apache WebServer running on Ubuntu
+#
+# Made by Name Surname ADV-IT  10-May-2019
+#---------------------------------------------------------------------------
+
+FROM ubuntu:18.04
+
+RUN apt-get -y update
+RUN apt-get -y install apache2
+
+RUN echo 'Hello World from Docker!' > /var/www/html/index.html
+
+
+CMD ["/usr/sbin/apache2ctl", "-D","FOREGROUND"]
+EXPOSE 80
+
+- Делаем Имедж из доккер файла находясь  в директории его расположения: (за это отвечает точка в конце комманды)
+docker build -t imageName:v1 .
+
+9)Мы можем зайти в операционную систему нашего контейнера:
+docker exec -it idDockerCont /bin/bash
+
+внести в него изменения. Напр. установить дополнительные функции и выйти из контейнера командой exit
+При этом контейнер продолжает быть запущеным.
+
+10)Сохранить изменения внесенные в контейнер в новый имедж
+docker commit containerID nameOfNewImage:v2
+
+через двоеточие задается тег имеджа
+
+11)Хранение имеджей происходит в репозиториях docker hub или amazon там нужно зарегистрироватся
+Import/Export Docker Image to AWS ECR
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker build -t nameImage:v1 .
+aws ecr get-login --no-include-email --region=ca-central-1
+docker tag  nameImage:v1  12345678.dkr.ecr.ca-central-1.amazonaws.com/myrepo:latest
+docker push 12345678.dkr.ecr.ca-central-1.amazonaws.com/myrepo:lastest
+
+docker pull 12345678.dkr.ecr.ca-central-1.amazonaws.com/myrepo:latest
+
+
+12)Kill and Delete all Containers and Images
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   docker rm -f $(docker ps -aq)
+   docker rmi -f $(docker images -q)

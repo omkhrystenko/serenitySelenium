@@ -434,3 +434,76 @@ Extend login.story 2 with negative scenarios
 
 Make sure all scenarios are passed.
 
+
+Lesson 8
+
+Запуск нескольких тестов стори по тегам @Metafilter("+login01 +login02")
+Запустить все тесты под логином login за исключением login01 @Metafilter("+login -login01")
+Если у нас есть несколько стори и они содержат сценарии с одинаковыми тегами то их можно запускать указав
+этот тег @Metafilter("+smoke")
+Нюанс в метатеге не должно быть пробелов, если @Metafilter("") запустит все тесты
+
+
+Класов степ может быть много, можно разделить на несколько класов, можно обьединить под наследованием 
+BaseStep и тп.
+
+CommonStepDefinition тщже можно можно разделить на несколько класов, можно обьединить под наследованием 
+BaseCommonStepDefinition и тп.
+
+Запуск профайла: mvn clean verify -Plocal
+Запуск через патерн в профайле. Что это за язык. - RegExp
+Ссылка: regexr.com
+
+Lesson 9
+Docker - image Windows:
+Настройка по ссылке https://medium.com/@aandryashin/selenium-on-windows-docker-revolution-f5a7eab205ad
+
+
+Настройки Selenoid на отдельной машине:
+По статье: https://medium.com/@aandryashin/selenium-on-windows-revisited-1ab8d51ccc06
+
+1) В отдельную папку скачиваем файл selenoid.exe (для своей ОС) по ссылке: https://github.com/aerokube/selenoid/releases
+
+2) В ту же папку скачиваем фал драйвера напр:
+ - IE (IEDriverServer.exe) по ссылке https://www.seleniumhq.org/download/  (третий раздел сверху)
+ - Chrome по ссылке https://chromedriver.chromium.org/downloads
+ 
+3) Если мы используем IE то этот браузер нужно настроить вручную перед запуском. Все настройки описаны по 
+ссылке: https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver. Основные настройки это:
+- масштаб. В окне IE браузера (не Edge) -> Настройки (Шестеренка) -> Масштаб (отметить не более 100%);
+- безопасность. В окне IE браузера (не Edge) -> Настройки (Шестеренка) -> Свойства браузера -> Безопасность ->
+В разделе Параметры безопасности в каждом подразделе (Интернет, Местная интрасеть, Надежные сайты, Опасные сайты) 
+отметить Включить защищенный режим (или убрать галочку с Влючить защищенный режим, во всех разделах должно быть одинаково).
+В IE настройки только делаются в ручную или через регистр windows через скрипт.
+
+4)Создаем файл browser.json куда прописываем браузеры и путь к драйверам, которые будем использовать при запуске тестов.
+{
+  "internet explorer": {
+    "default": "11",
+    "versions": {
+      "11": {
+        "image": ["D:\\Testing\\Selenoid\\IEDriverServer.exe"]
+      }
+    }
+  },
+  
+    "chrome": {
+    "default": "76",
+    "versions": {
+      "76": {
+        "image": ["D:\\Testing\\Selenoid\\chromedriver.exe"]
+      }
+    }
+  }
+}
+Если я добавляю браузер в этот файл то нужно перезапустить селеноид (просто перезапускаем run.bat файл)
+
+5)Создаем run.bat файл с командой запуска selenoid:
+D:\Testing\Selenoid\selenoid.exe -conf D:\Testing\Selenoid\browsers.json -disable-docker -limit 4 > D:\Testing\Selenoid\selenoid.log 2>&1
+Эта команда убирает docker с порта 4444, если он запущен. Максимальное количество браузеров на одном селеноид 4.
+
+Selenoid на отдельной машине работает подобно Selenium Server, для разграничения тестов на пользователях этой машины
+смотри статью по ссылке https://medium.com/@aandryashin/selenium-on-windows-revisited-1ab8d51ccc06 раздел Going to multiple desktops
+
+в случае если Selenoid должен запускать тесты на нескольких машинах то на них устанавливаются на каждой свой селеноид
+и дальше их IP обьединяются и распределяютс через selenoid go grid router (распределение нагрузки между пользователя, передача пароля)

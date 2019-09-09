@@ -1,0 +1,55 @@
+
+Удалить мусор ToolBox
+Uninstall Docker Toolbox.
+Uninstall VirtualBox (You cannot use VirtualBox, as it is necessary for Docker Toolbox and Hyper-V [used by Docker for Windows] at the same time.)
+Remove the Docker Toolbox env variables:
+Go to Control Panel\All Control Panel Items\System.
+Click Advanced system settings
+Go to Advanced Tab and click Environment Variables.
+Delete all DOCKER_* entries from System/User variables.
+DOCKER_TLS_VERIFY
+DOCKER_CERT_PATH
+DOCKER_HOST
+DOCKER_TOOLBOX_INSTALL_PATH
+Remove DOCKER_* from command-prompt or PowerShell. Run these command in PowerShell:
+
+[Environment]::SetEnvironmentVariable("DOCKER_CERT_PATH", $null, "User")
+
+[Environment]::SetEnvironmentVariable("DOCKER_HOST", $null, "User")
+
+[Environment]::SetEnvironmentVariable("DOCKER_MACHINE_NAME", $null, "User")
+
+[Environment]::SetEnvironmentVariable("DOCKER_TLS_VERIFY", $null, "User")
+
+[Environment]::SetEnvironmentVariable("DOCKER_TOOLBOX_INSTALL_PATH", $null, "User")
+
+Restart PowerShell. (If necessary, restart system as well.)
+
+
+0)Если Docker ранее устанавливался и удалялся на компьютере удали папку в директории пользователя .docker
+1)Загрузить и проинсталировать установочный файл .exe с сайта https://docs.docker.com/docker-for-windows/
+1.1)Go to Docker Settings - General
+    Turn on flag "Expose daemon on tcp://localhost:2375 without TLS"
+    Check if file present: C:\Users\userName\.docker\daemon.json
+1.2)Перезапусти Docker
+2)Загрузить Configuration Manager файл для нужной ОС с сайта https://aerokube.com/cm/latest/
+- docker должен быть запущен
+- переименовываем файл в cm.exe
+- в CMD переходим в директорию файла и запускаем его командой:  ./cm.exe selenoid start --vnc
+(подгружается имедж селеноида и запускается его контейнер)
+- Запускаем selenoid ui командой:  ./cm selenoid-ui start
+- Можем запускать ui селеноида на localhost:8080 и следить за прохождением тестов (у меня не запускалось на браузере Chrome
+но запустилось на Firefox)
+
+
+3)Enable/Disable Hyper-V
+- В консоли PowerShell c правами администратора, набираем команду:
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+- В консоли PowerShell c правами администратора, набираем команду:
+Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
+
+Вопросы:
+- Создать имедж добавить футкций и сохранить
+- Сохранение имеджей на docker hub и amazon
+- Тесты на googlecloud
+- простые docker file
